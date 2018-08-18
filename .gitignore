@@ -1,0 +1,10 @@
+
+\.DS_Store
+
+*.ini
+
+api_key\.txt
+
+creds\.txt
+
+*.pyc
