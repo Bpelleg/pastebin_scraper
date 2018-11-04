@@ -77,6 +77,12 @@ class Pastebin(object):
 
         return formatter.paste_list_from_xml(response.text)
     
+    def get_trending_raw_pastes(self):
+        trending_raw_pastes=[]
+        for paste_elt in self.get_trending():
+            raw_paste=self.get_raw_paste(paste_elt.key)
+            trending_raw_pastes.append(raw_paste)
+        return trending_raw_pastes
     
     
     def create_paste(self, api_paste_code, api_paste_private=0, api_paste_name=None, api_paste_expire_date=None,

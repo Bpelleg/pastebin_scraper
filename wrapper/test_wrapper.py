@@ -10,4 +10,12 @@ Test module for the pastebin api wraper
 from pastebin_wrapper import Pastebin
 
 p=Pastebin()
-print(p.api_key,p.api_user_key)
+print(p.api_dev_key,p.api_user_key)
+
+
+#pastes=p.get_trending_raw_pastes()
+  
+text="Hi, I'm testing the API"
+url=p.create_paste(text,1,"Test API")
+print(url)
+    

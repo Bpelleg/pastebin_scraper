@@ -8,7 +8,7 @@
 """Contains function that manipulate the API returns for easier data manipulation."""
 import xml.etree.ElementTree as et
 import re
-from pbwrap.models import Paste
+from models import Paste
 
 
 def paste_list_from_xml(xml_paste):
