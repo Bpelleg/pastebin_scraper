@@ -23,13 +23,13 @@ class Pastebin(object):
         
         
     def load_api_key(self):
-        api_file=open('../api_key.txt','r')
+        api_file=open('api_key.txt','r')
         self.api_dev_key=api_file.readline()
         self.api_dev_key=re.sub(r'[^a-zA-Z0-9]','',self.api_dev_key)
         api_file.close()
         
     def authenticate(self):
-        creds_file=open('../creds.txt','r')
+        creds_file=open('creds.txt','r')
         
         username=creds_file.readline()
         username=re.sub(r'[^a-zA-Z0-9]','',username)
@@ -51,18 +51,7 @@ class Pastebin(object):
 
         return self.api_user_key
     
-    def get_user_details(self):
-        """Return user details in a dictionary.
-           Can only be user after authenticating with get_user_id(username, password).
-           :returns: dictionary containing user details
-           :rtype: dictionary
-        """
-        data = {'api_dev_key': self.api_dev_key,
-                'api_user_key': self.api_user_key}
 
-        response = requests.post('https://pastebin.com/api/api_post.php', data)
-
-        return formatter.user_from_xml(response.text)
     
     def get_trending(self):
         """Return a list of paste objects created from the most trending pastes
@@ -176,9 +165,8 @@ class Pastebin(object):
         r = requests.get('https://pastebin.com/api/api_raw.php' + paste_id)
         return r.text
     
-    
     @staticmethod
-    def scrape_paste_metadata(paste_key):
+    def scrape_paste_metadata(paste_key):   
         """scrape_paste_metadata(paste_key)
             Return a dictionary containing the metadata of the paste.
             :param paste_key: the unique key of the paste you want to scrape
