@@ -18,7 +18,8 @@ class PastebinScraper(object):
     def __init__(self):
         self.pastebin=Pastebin()
         self.rexps=[]
-        self.scrape_limit='50'
+        self.scrape_limit='100'
+        self.scraped_pastes=[]
         
         
     def scrape(self,lang='none'):
@@ -37,18 +38,23 @@ class PastebinScraper(object):
 
         return response.json()
 
+    def get_scraped_pastes(self):
+        return self.scraped_pastes
+
     def scrape_raw(self,lang='none'):
         """ Return the raw texts of the most recents pastes
         """
         pastes_json=self.scrape(lang);
         time.sleep(1)
-        raw_pastes=[]
+        raw_pastes=dict()
         
         for paste in pastes_json:
             key=paste['key']
-            raw_paste=self.scrape_paste(key)
-            raw_pastes.append(raw_paste)
-            time.sleep(1)
+            if key not in self.scraped_pastes :
+                raw_paste=self.scrape_paste(key)
+                raw_pastes[key]=raw_paste
+                self.scraped_pastes.append(key)
+                time.sleep(1)
             
         return raw_pastes
             
@@ -100,12 +106,12 @@ class PastebinScraper(object):
             at least once
         """
 
-        matching_pastes=[]
+        matching_pastes=dict()
         
-        for rp in raw_pastes :
+        for key, rp in raw_pastes.items() :
             for rex in self.rexps :
                 if rex.search(rp) :
-                    matching_pastes.append(rp)
+                    matching_pastes[key]=rp
                     break      
         return matching_pastes  
  
@@ -128,14 +134,12 @@ class PastebinScraper(object):
         
         for rex in self.rexps :
             patterns[rex.pattern]=[]
-            for rp in raw_pastes :
+            for key, rp in raw_pastes.items() :
                 (patterns[rex.pattern]).extend(rex.findall(rp))
                 
         return patterns
             
-        
-        
-        
+                    
         
     
     def scrape_find_patterns(self, lang='none'):
@@ -144,5 +148,11 @@ class PastebinScraper(object):
         raw_pastes=self.scrape_raw(lang)
         
         return self.find_all_patterns(raw_pastes)
-        
+   
+
+    def combined_scraping(self, lang='none'):
+        """ Find all the patterns in the most recent pastes
+            also return the raw texts of the most recents pastes that contains 
+            one of the patterns
+        """ 
     
