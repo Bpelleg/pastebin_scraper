@@ -47,11 +47,13 @@ def get_matching():
 
 
 @app.route('/results/<id>')
-def hello_name(name):
+def get_results(name):
     return "TODO dev this part : return results as JSON for the given pattern ID {}!".format(id)
 
 
-
+@app.route('/postresult', methods=['GET', 'POST'])
+def post_result():
+    return "TODO dev this part : add result to the DB thanks to a POST request"
 
 
 if __name__ == '__main__':
