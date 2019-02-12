@@ -43,17 +43,13 @@ def post_patterns():
 
 @app.route('/results')
 def get_matching():
-    return "TODO dev this part : returns a list of the patterns in use with their IDs"
+    return "TODO dev this part : returns a list of the result files with their IDs"
 
 
 @app.route('/results/<id>')
 def get_results(name):
-    return "TODO dev this part : return results as JSON for the given pattern ID {}!".format(id)
+    return "TODO dev this part : return results as JSON for the given result file ID {}!".format(id)
 
-
-@app.route('/postresult', methods=['GET', 'POST'])
-def post_result():
-    return "TODO dev this part : add result to the DB thanks to a POST request"
 
 
 if __name__ == '__main__':
