@@ -10,3 +10,7 @@ API_OPTIONS = {'TREND': 'trends',
                'USER_PASTE': 'list',
                'DELETE_PASTE': 'delete',
                'USER_RAW_PASTE': 'show_paste'}
+
+DEFAULT_PATH = "TODO"
+
+WAITING_TIME = 50

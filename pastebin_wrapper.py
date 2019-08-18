@@ -13,7 +13,7 @@ import re
 import os
 import requests
 import formatter
-import constants
+import params
 
 class Pastebin(object):
     def __init__(self):
@@ -60,7 +60,7 @@ class Pastebin(object):
         """
         data = {
             'api_dev_key': self.api_dev_key,
-            'api_option': constants.API_OPTIONS['TREND']}
+            'api_option': params.API_OPTIONS['TREND']}
 
         response = requests.post('https://pastebin.com/api/api_post.php', data)
 
@@ -97,7 +97,7 @@ class Pastebin(object):
                 'api_paste_name': api_paste_name,
                 'api_paste_expire_date': api_paste_expire_date,
                 'api_paste_format': api_paste_format,
-                'api_option': constants.API_OPTIONS['PASTE']}
+                'api_option': params.API_OPTIONS['PASTE']}
 
         # Filter data and remove dictionary None keys.
         filtered_data = {k: v for k, v in data.items() if v is not None}

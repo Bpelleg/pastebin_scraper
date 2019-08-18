@@ -8,7 +8,10 @@ as well as fetching its results
 """
 
 from flask import Flask
+from test_thread import TestThread
 app = Flask(__name__)
+
+thread=TestThread()
 
 
 @app.route('/')
@@ -18,17 +21,21 @@ def index():
 
 @app.route('/launch')
 def launch():
+    """create a new thread each time"""
+    thread.start()
     return "TODO dev this part : launching the scraping if not running yet"
 
 
 @app.route('/stop')
 def stop():
+    thread.stop()
     return "TODO dev this part : stop the scraper"
 
 
 @app.route('/stats')
 def stats():
     return "TODO dev this part : get stats about the scraping process and its results"
+
 
 @app.route('/patterns')
 def get_patterns():
