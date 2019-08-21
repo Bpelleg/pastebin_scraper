@@ -155,4 +155,10 @@ class PastebinScraper(object):
             also return the raw texts of the most recents pastes that contains 
             one of the patterns
         """ 
+        
+        raw_pastes=self.scrape_raw(lang)
+        patterns=self.find_all_patterns(raw_pastes)
+        matches=self.find_matching_pastes(raw_pastes)
+        
+        return {"matches":matches, "patterns":patterns}
     

@@ -3,6 +3,8 @@
 import params
 import threading 
 import pastebin_scraper
+import time
+import stats
 
 
 class ScrapingThread(threading.Thread):
@@ -15,6 +17,7 @@ class ScrapingThread(threading.Thread):
         self.name=name
         self.stop_event=threading.Event()
         self.scraper=pastebin_scraper.PastebinScraper()
+        self.stats=stats.Stats()
         
         for re in res :
             self.scraper.add_re(re)
@@ -28,11 +31,10 @@ class ScrapingThread(threading.Thread):
         self.init_stats()
         
         while not self.stopped() :
-            res_patterns=scraper.scrape_find_patterns()
-            time.sleep(params.WAITING_TIME)            
-            scraped_pastes=scraper.get_scraped_pastes()
+            results=self.scraper.combined_scraping()
+            self.store_results(results)
+            self.update_stats(results)
             time.sleep(params.WAITING_TIME)
-            self.stats()
             
             
             
@@ -49,25 +51,15 @@ class ScrapingThread(threading.Thread):
     def running(self):
         self.stop_event.clear()
     
-    def save_patterns(self):
-        """TODO implement 
-        save and update stats"""
-        
-        
-    def save_pastes(self):
+    def store_results(self):
         """TODO implement
-        save and update stats"""
+            store results in files in a specific folder
+        """
         
     def stats(self):
-        """TODO implement)
-    stats: 
-            - nb patterns
-            - nb pastes
-            - nb de "round" de scraping
-            - temps d'exécution"""
+        return self.stats.serialize()
     
-    def update_stats(self):
-        """TODO implement"""
+    def update_stats(self,results):
+        self.stats.update(results["matches"].len(),results["patterns"].len())
+       
         
-    def init_stats(self):
-        """TODO implement"""

@@ -44,3 +44,7 @@ scraped_pastes=scraper.get_scraped_pastes()
 time.sleep(10)
 res_match=scraper.scrape_matching()
 
+time.sleep(10)
+
+dic=scraper.combined_scraping()
+
