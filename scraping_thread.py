@@ -32,16 +32,11 @@ class ScrapingThread(threading.Thread):
     def run(self):
         print("running !")
         self.running()
-        
-        i=0
-               
+ 
         try :
             while not self.stopped() :
-                i=i+1
-                print(i)
-                """for re in self.scraper.get_rexps():
-                print(re)"""
                 
+                print(self.get_stats().serialize())
                 results=self.scraper.combined_scraping()
                 self.store_results(results)
                 self.update_stats(results)
@@ -76,7 +71,8 @@ class ScrapingThread(threading.Thread):
         return self.stats
     
     def update_stats(self,results):
-        self.stats.update(len(results["matches"]),len(results["patterns"]))
+        if len(results["matches"])>0 and len(results["patterns"])>0:
+            self.stats.update(len(results["matches"]),len(results["patterns"]))
         
         
         
@@ -84,7 +80,8 @@ if __name__ == '__main__':
     regexps=["[A-Z][a-z][0-9]\s","[a-zA-Z0-9.!#$%&*+=?^_~-]+@[a-zA-Z0-9]{1,63}\.[a-zA-Z0-9]{1,63}[\.]{0,1}[a-zA-Z0-9]{0,63}[:|]{1}\S{1,63}","<\S{1,10}>"]
     thread=ScrapingThread(regexps)
     thread.start() 
-    thread.join()
+    time.join(300)
+    thread.stop()
 
 
 """
