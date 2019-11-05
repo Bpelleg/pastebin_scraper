@@ -15,10 +15,10 @@ import time
 import re
 
 class PastebinScraper(object):
-    def __init__(self):
+    def __init__(self,limit=100):
         self.pastebin=Pastebin()
         self.rexps=[]
-        self.scrape_limit='100'
+        self.scrape_limit=limit
         self.scraped_pastes=[]
         
         
@@ -89,6 +89,11 @@ class PastebinScraper(object):
         """
         crexp=re.compile(rexp)
         self.rexps.append(crexp)
+        
+    def get_rexps(self):
+        """ return regexps for this scraper
+        """
+        return self.rexps
         
     def clear_res(self):
         """ Removes all regexps

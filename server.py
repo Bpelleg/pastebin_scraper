@@ -7,9 +7,9 @@ as well as fetching its results
 @author: pellegrini
 """
 from flask import Flask
-from test_thread import TestThread
+from scraping_thread import ScrapingThread
 
-thread=TestThread()
+thread=ScrapingThread([])
 
 def create_app():
     
@@ -24,16 +24,19 @@ def create_app():
     def launch():
         """stop an already existing thread then create a new one each time"""
         global thread
-        thread.stop()
-        thread=TestThread()
+        if(thread.running):
+            return "already running"
+        regexps=["[A-Z][a-z][0-9]\s","[a-zA-Z0-9.!#$%&*+=?^_~-]+@[a-zA-Z0-9]{1,63}\.[a-zA-Z0-9]{1,63}[\.]{0,1}[a-zA-Z0-9]{0,63}[:|]{1}\S{1,63}","<\S{1,10}>"]
+        thread=ScrapingThread(regexps)
         thread.start()
         return "TODO dev this part : launching the scraping if not running yet"
     
     
     @app.route('/stop')
-    def stop():
+    def stop():      
         thread.stop()
-        return "TODO dev this part : stop the scraper"
+        stats=thread.get_stats()
+        return stats.serialize()
 
 
     @app.route('/stats')

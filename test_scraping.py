@@ -5,6 +5,8 @@ Created on Sat Nov 24 16:14:17 2018
 
 @author: pellegrini
 test module for the pastebin scraping module
+
+remember to whitelist the test machine's IP
 """
 
 """
@@ -31,20 +33,19 @@ scraper=PastebinScraper()
 
 scraper.add_re(email_regexp)
 scraper.add_re("<\S{1,10}>")
-scraper.add_re("[a-zA-Z][0-9]a-zA-Z][0-9]")
 scraper.add_re(pwd_leak_regexp)
 scraper.add_re(simple_mail_regexp)
 scraper.add_re(simple_pwd_leak_regexp)
 
 res_patterns=scraper.scrape_find_patterns()
-
-time.sleep(10)
+print("res_patterns=scraper.scrape_find_patterns()")
+time.sleep(2)
 
 scraped_pastes=scraper.get_scraped_pastes()
-time.sleep(10)
+print("scraped_pastes=scraper.get_scraped_pastes()")
+time.sleep(2)
 res_match=scraper.scrape_matching()
-
-time.sleep(10)
-
+print("res_match=scraper.scrape_matching()")
+time.sleep(2)
 dic=scraper.combined_scraping()
-
+print("dic=scraper.combined_scraping()")

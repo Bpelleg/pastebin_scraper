@@ -17,5 +17,5 @@ class Stats():
         self.patterns=self.patterns+nb_p
         
     def serialize(self):
-        serialized='LOOPS='+self.loops+'\nNB MATCHES='+self.matching+'\nNB PATTERNS='+self.patterns
+        serialized='LOOPS='+str(self.loops)+'\nNB MATCHES='+str(self.matching)+'\nNB PATTERNS='+str(self.patterns)
         return serialized
