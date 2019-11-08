@@ -14,6 +14,7 @@ import pastebin_scraper
 import time
 import stats
 import json
+import csv
 
 class ScrapingThread(threading.Thread):
 
@@ -26,6 +27,7 @@ class ScrapingThread(threading.Thread):
         self.scraper=pastebin_scraper.PastebinScraper()
         self.stats=stats.Stats()
         print("initialize thread")
+        #self.load_regexps_file(file)
         for re in regexps :
             self.scraper.add_re(re)
         
@@ -35,11 +37,10 @@ class ScrapingThread(threading.Thread):
  
         try :
             while not self.stopped() :
-                
-                print(self.get_stats().serialize())
                 results=self.scraper.combined_scraping()
                 self.store_results(results)
                 self.update_stats(results)
+                print(self.get_stats().serialize())
                 time.sleep(params.WAITING_TIME)
             
         except Exception as e:
@@ -62,25 +63,49 @@ class ScrapingThread(threading.Thread):
         self.stop_event.clear()
         
     def store_results(self, results):
-        import time;
-        with open('result'+str(time.time())+'.json', 'w') as f:
-            json.dump(results, f)
+        timestamp=time.time()
+        with open('./results/matches'+str(timestamp)+'.json', 'w') as f:
+            json.dump(results["matches"], f)
+        self.store_patterns(results["patterns"],timestamp)
+        
+    def store_patterns(self,patterns,timestamp):
+        formatted_patterns=[]
+        for key,values in patterns.items():      
+            for value in values:
+                dictionary=dict()
+                dictionary["timestamp"]=timestamp
+                dictionary["regexp"]=key
+                dictionary["pattern"]=value
+                formatted_patterns.append(dictionary)
+            
+        with open('./results/patterns'+str(timestamp)+'.csv', 'w') as f:
+            writer=csv.DictWriter(f,fieldnames=['timestamp','regexp','pattern'])
+            writer.writeheader()
+            for data in formatted_patterns:
+                writer.writerow(data)
+        
+            
         
         
     def get_stats(self):
         return self.stats
     
     def update_stats(self,results):
-        if len(results["matches"])>0 and len(results["patterns"])>0:
+        if len(results["matches"])>-1 and len(results["patterns"])>-1:
             self.stats.update(len(results["matches"]),len(results["patterns"]))
         
-        
+    def load_regexps_file(self,filename):
+        """ TODO implement 
+        for re in regexps :
+            self.scraper.add_re(re)
+        """
         
 if __name__ == '__main__':
     regexps=["[A-Z][a-z][0-9]\s","[a-zA-Z0-9.!#$%&*+=?^_~-]+@[a-zA-Z0-9]{1,63}\.[a-zA-Z0-9]{1,63}[\.]{0,1}[a-zA-Z0-9]{0,63}[:|]{1}\S{1,63}","<\S{1,10}>"]
     thread=ScrapingThread(regexps)
+    #thread=ScrapingThread("./regexps.txt")
     thread.start() 
-    time.join(300)
+    thread.join(2000)
     thread.stop()
 
 
