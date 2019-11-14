@@ -11,6 +11,7 @@ API_OPTIONS = {'TREND': 'trends',
                'DELETE_PASTE': 'delete',
                'USER_RAW_PASTE': 'show_paste'}
 
-DEFAULT_PATH = "TODO"
 
-WAITING_TIME = 40
+WAITING_TIME = 60
+
+REGEXPS_FILE="./regexps.txt"

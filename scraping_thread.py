@@ -19,7 +19,7 @@ import csv
 class ScrapingThread(threading.Thread):
 
     
-    def __init__(self,regexps,name="Scraping thread",  path=params.DEFAULT_PATH):
+    def __init__(self,name="Scraping thread",  path=params.REGEXPS_FILE):
         super(ScrapingThread, self).__init__()
         self.stop_event=threading.Event() 
         self.root_path=path
@@ -27,9 +27,7 @@ class ScrapingThread(threading.Thread):
         self.scraper=pastebin_scraper.PastebinScraper()
         self.stats=stats.Stats()
         print("initialize thread")
-        #self.load_regexps_file(file)
-        for re in regexps :
-            self.scraper.add_re(re)
+        self.load_regexps_file(path)
         
     def run(self):
         print("running !")
@@ -95,28 +93,19 @@ class ScrapingThread(threading.Thread):
             self.stats.update(len(results["matches"]),len(results["patterns"]))
         
     def load_regexps_file(self,filename):
-        """ TODO implement 
-        for re in regexps :
+        regexps=[]
+        with open(filename) as f:
+            regexps = f.readlines()
+        regexps = [x.strip() for x in regexps] 
+        
+        for re in regexps:
             self.scraper.add_re(re)
-        """
+        
+        print(self.scraper.get_rexps())
+        
         
 if __name__ == '__main__':
-    regexps=["[A-Z][a-z][0-9]\s","[a-zA-Z0-9.!#$%&*+=?^_~-]+@[a-zA-Z0-9]{1,63}\.[a-zA-Z0-9]{1,63}[\.]{0,1}[a-zA-Z0-9]{0,63}[:|]{1}\S{1,63}","<\S{1,10}>"]
-    thread=ScrapingThread(regexps)
-    #thread=ScrapingThread("./regexps.txt")
+    thread=ScrapingThread()  
     thread.start() 
-    thread.join(2000)
+    thread.join(1200)
     thread.stop()
-
-
-"""
-import json
-
-with open('my_dict.json', 'w') as f:
-    json.dump(my_dict, f)
-
-# elsewhere...
-
-with open('my_dict.json') as f:
-    my_dict = json.load(f)
-"""
