@@ -12,3 +12,5 @@ creds\.txt
 *.json
 
 *.csv
+
+regexps.txt
